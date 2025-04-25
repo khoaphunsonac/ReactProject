@@ -4,13 +4,14 @@ import TableInfo from "./TableInfo";
 
 export default function SearchByAvg() {
     let [score, setScore] = useState({ max: 0, min: 0 });
-    let [result, setResult] = useState<Student[]>([]);
+    let [result, setResult]: any = useState<Student[]>([]);
     const Search = () => {
         const res = students.filter((student) => {
             let avg = (student.courses.math * 3 + student.courses.physic * 2 + student.courses.chem) / 6;
             return avg >= score.min && avg <= score.max;
         });
         setResult(res);
+    
     };
     return (
         <div className="container mt-5">
@@ -49,10 +50,10 @@ export default function SearchByAvg() {
                     Tìm kiếm
                 </button>
             </div>
-            {result && result.length > 0 ? (
+            {result.length > 0 ? (
                 <div className="row">
-                    {result.map((student, index) => (
-                        <div className="col-md-6 col-lg-4 mb-3" key={index}>
+                    {result.map((student: Student) => (
+                        <div className="col-md-6 col-lg-4 mb-3" key={student.id}>
                             <div className="card shadow-sm">
                                 <div className="card-body">
                                     <TableInfo student={student} />
@@ -61,9 +62,9 @@ export default function SearchByAvg() {
                         </div>
                     ))}
                 </div>
-            ) : (
+            ) : result.length === 0 && (score.min > 0 || score.max > 0) ? (
                 <p className="text-center mt-4 text-muted">Không tìm thấy sinh viên nào.</p>
-            )}
+            ) : null}
         </div>
     );
 }
